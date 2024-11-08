@@ -1,0 +1,455 @@
+/* 
+  .analytics-container {
+  
+    padding: 1.5rem;
+  }
+
+    /* // Search Input */
+    .search-input {
+      .p-inputtext {
+        background: #f0f2f5;
+        border: none;
+        border-radius: 2rem;
+        padding: 0.75rem 2.5rem;
+        width: 280px;
+        
+        &::placeholder {
+          color: #64748b;
+        }
+      }
+    }
+
+    /* // Action Buttons */
+  
+      .p-button {
+        width: 40px;
+        height: 40px;
+        background: #f0f2f5;
+        color: #64748b;
+        border: none;
+      }
+
+        &:hover {
+          background: #e2e8f0;
+        }
+
+        .pi {
+          font-size: 1rem;
+        }
+   
+
+    /* // Cards Styling */
+
+      ::ng-deep .p-card {
+        border-radius: 1rem;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      }
+
+        .p-card-header {
+          padding: 1rem 1.5rem;
+          border-bottom: 1px solid #f1f5f9;
+        }
+
+        .p-card-content {
+          padding: 1.5rem;
+        }
+
+
+    /* // Ice Cream Items */
+    .ice-cream-item {
+      background: #f8fafc;
+      transition: transform 0.2s;
+    }
+      .ice-cream-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 0.75rem;
+        object-fit: cover;
+      }
+
+      .total-sales {
+        font-size: 0.875rem;
+      }
+
+      .rating {
+        color: #fbbf24;
+        font-size: 0.875rem;
+      }
+
+      .percentage-circle {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: rgba(255,20,147,0.1);
+        color: #ff1493;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+      }
+  
+    /* // Top Flavors */
+    .flavor-list {
+      .progress-bar {
+        height: 8px;
+        background: #f0f2f5;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 0.5rem;
+      }
+
+        .progress {
+          height: 100%;
+          border-radius: 4px;
+          
+          &.vanilla { background: #ffd700; }
+          &.strawberry { background: #ff1493; }
+          &.chocolate { background: #8b4513; }
+          &.pistachio { background: #90ee90; }
+          &.milkshake { background: #20b2aa; }
+        }
+  
+
+    /* // Period Button */
+    .period-button {
+      background: #fff0f5 !important;
+      color: #ff1493 !important;
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+    }
+
+    /* // Charts */
+    .chart-container {
+      padding: 1rem 0;
+    }
+
+    /* // Legend */
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+
+      &.retained { background: #ffd700; }
+      &.new { background: #00ced1; }
+    }
+
+    /* // Target Income */
+    .target-content {
+      .target-percentage {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .target-amount {
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin: 0.5rem 0;
+      }
+
+      .target-total {
+        color: #64748b;
+        font-size: 0.875rem;
+      }
+    }
+  } */
+
+  .favorites-card{
+  background: rgb(104, 76, 76);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+
+/* Ice Cream Item */
+.ice-cream-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+  width: 44%;
+}
+.ice-cream-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  /* width: 100%; */
+  /* background-color: red; */
+  /* justify-content: center; */
+  /* align-items: center; */
+}
+
+.ice-cream-image {
+  width: 48px;
+  height: 48px;
+  border-radius: 0.5rem;
+  object-fit: cover;
+}
+
+.ice-cream-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.total-sales {
+  color: #ff1493;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.total-sales i {
+  font-size: 0.875rem;
+}
+
+.rating {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.rating i {
+  color: #ffd700;
+  font-size: 0.75rem;
+}
+
+.percentage-badge {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgba(255, 192, 203, 0.15);
+  color: #ff1493;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Top Flavors Card */
+.top-flavors {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+
+.flavor-item {
+  margin-bottom: 1.5rem;
+}
+
+.flavor-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.flavor-name {
+  font-size: 0.875rem;
+  color: #333;
+}
+
+.flavor-percentage {
+  font-size: 0.875rem;
+  color: #333;
+}
+
+.progress-bar-container {
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Flavor-specific progress bars */
+.vanilla-progress { background: #ffd700; }
+.strawberry-progress { background: #ff1493; }
+.chocolate-progress { background: #8b4513; }
+.pistachio-progress { background: #90ee90; }
+.milkshake-progress { background: #20b2aa; }
+
+.know-more-button {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.vanilla-button { color: #ffd700; }
+.strawberry-button { color: #ff1493; }
+.chocolate-button { color: #8b4513; }
+.pistachio-button { color: #90ee90; }
+.milkshake-button { color: #20b2aa; }
+
+/* Grid Layout */
+.grid-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.card-header h2 {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
+}
+
+.header-content .date {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.period-badge {
+  padding: 0.375rem 1rem;
+  border-radius: 1rem;
+  background: #fff0f5;
+  color: #ff1493;
+  border: none;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.chart-container {
+  position: relative;
+  height: 300px;
+}
+
+/* Sales Details specific styles */
+.sales-details .chart-container {
+  height: 250px;
+}
+
+/* Order Chart specific styles */
+.order-chart .chart-container {
+  height: 250px;
+}
+
+/* Customer Map specific styles */
+.customer-map {
+  grid-column: span 2;
+}
+
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legend-dot.retained {
+  background: #ffd700;
+}
+
+.legend-dot.new {
+  background: #00ced1;
+}
+
+/* Target Income specific styles */
+.target-income {
+  position: relative;
+}
+
+.target-income-card{
+  background: rgb(93, 22, 22);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.target-info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.target-info .percentage {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.target-info .amount {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #333;
+  margin-top: 0.25rem;
+}
+
+.target-info .total {
+  font-size: 0.875rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 992px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .customer-map {
+    grid-column: auto;
+  }
+}

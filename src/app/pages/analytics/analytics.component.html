@@ -1,0 +1,146 @@
+<div class="analytics-container">
+  <!-- Header -->
+  <div class="flex justify-content-between align-items-center mb-4">
+    <h1 class="text-2xl font-medium">Analytics</h1>
+    <div class="flex align-items-center gap-3">
+      <span class="p-input-icon-left search-input">
+        <i class="pi pi-search"></i>
+        <input type="text" pInputText placeholder="Search here..." />
+      </span>
+      <div class="action-buttons flex gap-2">
+        <button pButton icon="pi pi-bell" class="p-button-rounded p-button-text"></button>
+        <button pButton icon="pi pi-bookmark" class="p-button-rounded p-button-text"></button>
+        <button pButton icon="pi pi-heart" class="p-button-rounded p-button-text"></button>
+      </div>
+      <div class="flex align-items-center gap-2 user-profile">
+        <p-avatar image="assets/profile.jpg" shape="circle"></p-avatar>
+        <span class="font-medium">William</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="grid">
+    <!-- First Row: Favorites and Top Flavors -->
+   
+
+ <div class="grid-container">
+    <!-- Favorites Ice Creams -->
+    <div class="favorites-card card">
+      <h2>Favorites Ice Creams</h2>
+      <div class="ice-cream-list">
+        <div class="ice-cream-item" *ngFor="let item of favoriteIceCreams">
+          <img [src]="item.image" [alt]="item.name" class="ice-cream-image" />
+          <div class="ice-cream-details">
+            <div class="total-sales">
+              <i class="pi pi-chart-line"></i>
+              {{ item.sales }} Total Sales
+            </div>
+            <div class="rating">
+              <i
+                class="pi pi-star-fill"
+                *ngFor="let star of [1, 2, 3, 4, 5]"
+              ></i>
+            </div>
+          </div>
+          <div class="percentage-badge">{{ item.percentage }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Flavors -->
+    <div class="top-flavors">
+      <h2>Top Flavors</h2>
+      <div class="flavor-item" *ngFor="let flavor of topFlavors">
+        <div class="flavor-header">
+          <span class="flavor-name">{{ flavor.name }}</span>
+          <span class="flavor-percentage">{{ flavor.percentage }}%</span>
+        </div>
+        <div class="progress-bar-container">
+          <div
+            [class]="'progress-bar ' + flavor.progressClass"
+            [style.width.%]="flavor.percentage"
+          ></div>
+        </div>
+        <button [class]="'know-more-button ' + flavor.buttonClass">
+          Know More
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+  <!-- Sales Details -->
+  <div class="sales-details card">
+    <div class="card-header">
+      <div class="header-content">
+        <h2>Sales Details</h2>
+        <span class="date">February, 2023</span>
+      </div>
+      <button class="period-badge">Monthly</button>
+    </div>
+    <div class="chart-container">
+      <p-chart type="doughnut" 
+              [data]="salesDetailsData" 
+              [options]="salesDetailsOptions">
+      </p-chart>
+    </div>
+  </div>
+
+  <!-- Order Chart -->
+  <div class="order-chart card">
+    <div class="card-header">
+      <h2>Order Chart</h2>
+    </div>
+    <div class="chart-container">
+      <p-chart type="bar" 
+              [data]="orderChartData" 
+              [options]="orderChartOptions">
+      </p-chart>
+    </div>
+  </div>
+
+  <div class="grid-container">
+  <!-- Customer Map -->
+  <div class="customer-map card">
+    <div class="card-header">
+      <h2>Customer Map</h2>
+      <button class="period-badge">Monthly</button>
+    </div>
+    <div class="chart-container">
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-dot retained"></span>
+          <span>Retained</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot new"></span>
+          <span>New</span>
+        </div>
+      </div>
+      <p-chart type="bar" 
+              [data]="customerMapData" 
+              [options]="customerMapOptions">
+      </p-chart>
+    </div>
+  </div>
+
+  <!-- Daily Target Income -->
+  <div class="target-income card">
+    <div class="card-header">
+      <h2>Daily Target Income</h2>
+    </div>
+    <div class="chart-container">
+      <p-chart type="doughnut" 
+              [data]="targetIncomeData" 
+              [options]="targetIncomeOptions">
+      </p-chart>
+      <div class="target-info">
+        <div class="percentage">75%</div>
+        <div class="amount">$675.56</div>
+        <div class="total">from $1,000</div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>

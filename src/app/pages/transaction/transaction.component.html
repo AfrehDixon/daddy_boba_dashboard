@@ -1,0 +1,177 @@
+<!-- transactions.component.html -->
+<div class="transactions-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>Transactions</h1>
+    <div class="header-actions">
+      <div class="search-bar">
+        <i class="material-icons">search</i>
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="applyFilters()"
+          placeholder="Search transactions..."
+        />
+      </div>
+      <button class="export-btn" >
+        <i class="material-icons">download</i>
+        Export
+      </button>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="statistics-grid">
+    <div class="stat-card">
+      <div class="stat-title">Total Amount</div>
+      <div class="stat-value">₵{{ totalAmount | number:'1.2-2' }}</div>
+    </div>
+    <div class="stat-card success">
+      <div class="stat-title">Successful</div>
+      <div class="stat-value">{{ successfulTransactions }}</div>
+    </div>
+    <div class="stat-card warning">
+      <div class="stat-title">Pending</div>
+      <div class="stat-value">{{ pendingTransactions }}</div>
+    </div>
+    <div class="stat-card danger">
+      <div class="stat-title">Failed</div>
+      <div class="stat-value">{{ failedTransactions }}</div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <div class="filters-grid">
+      <div class="filter-group">
+        <label>Date Range</label>
+        <div class="date-inputs">
+          <input 
+            type="date" 
+            [(ngModel)]="filters.dateRange.startDate"
+            (ngModelChange)="applyFilters()"
+          />
+          <span>to</span>
+          <input 
+            type="date" 
+            [(ngModel)]="filters.dateRange.endDate"
+            (ngModelChange)="applyFilters()"
+          />
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label>Transaction Type</label>
+        <select 
+          [(ngModel)]="filters.type"
+          (ngModelChange)="applyFilters()"
+        >
+          <option value="">All Types</option>
+          <option *ngFor="let type of transactionTypes" [value]="type">
+            {{ type | titlecase }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Status</label>
+        <select 
+          [(ngModel)]="filters.status"
+          (ngModelChange)="applyFilters()"
+        >
+          <option value="">All Statuses</option>
+          <option *ngFor="let status of transactionStatuses" [value]="status">
+            {{ status | titlecase }}
+          </option>
+        </select>
+      </div>
+
+      <!-- <div class="filter-group">
+        <label>Amount Range</label>
+        <div class="amount-inputs">
+          <input 
+            type="number" 
+            [(ngModel)]="filters.minAmount"
+            (ngModelChange)="applyFilters()"
+            placeholder="Min"
+          />
+          <span>to</span>
+          <input 
+            type="number" 
+            [(ngModel)]="filters.maxAmount"
+            (ngModelChange)="applyFilters()"
+            placeholder="Max"
+          />
+        </div>
+      </div> -->
+    </div>
+
+    <button class="clear-filters" (click)="clearFilters()">
+      Clear Filters
+    </button>
+  </div>
+
+  <!-- Transactions Table -->
+  <div class="table-container">
+    <table class="transactions-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date & Time</th>
+          <th>Customer</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Payment Method</th>
+          <th>Reference</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let transaction of filteredTransactions">
+          <td>{{ transaction.id }}</td>
+          <td>
+            {{ transaction.date }}<br>
+            <span class="time">{{ transaction.time }}</span>
+          </td>
+          <td>{{ transaction.customerName }}</td>
+          <td>
+            <span class="badge" [class]="transaction.type">
+              {{ transaction.type | titlecase }}
+            </span>
+          </td>
+          <td class="amount">₵{{ transaction.amount | number:'1.2-2' }}</td>
+          <td>
+            <span class="badge" [class]="transaction.status">
+              {{ transaction.status | titlecase }}
+            </span>
+          </td>
+          <td>{{ transaction.paymentMethod }}</td>
+          <td>{{ transaction.reference }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- <div class="loading-overlay" >
+  <div class="spinner"></div>
+</div> -->
+
+<!-- Empty State -->
+<div class="empty-state" *ngIf="filteredTransactions.length === 0">
+  <i class="material-icons empty-icon">receipt_long</i>
+  <h3>No Transactions Found</h3>
+  <p>Try adjusting your filters or search criteria</p>
+</div>
+
+<!-- Add this to your transaction table -->
+<ng-container *ngIf="filteredTransactions.length > 0; else noData">
+  <!-- Existing table content -->
+</ng-container>
+<ng-template #noData>
+  <div class="empty-state">
+    <i class="material-icons empty-icon">receipt_long</i>
+    <h3>No Transactions Found</h3>
+    <p>Try adjusting your filters or search criteria</p>
+  </div>
+</ng-template>

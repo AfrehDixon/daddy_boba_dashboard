@@ -1,0 +1,135 @@
+<div class="dashboard-stats">
+  <!-- Favorites and Top Flavors Row -->
+ <div class="metrics-container">
+  <!-- Metrics Cards -->
+  <div class="metrics-grid">
+    <!-- Total Menus -->
+    <div class="metric-card">
+      <div class="metric-header">
+        <div class="metric-title">
+          <span>Total Menus</span>
+          <i class="pi pi-box"></i>
+        </div>
+        <div class="metric-value">546</div>
+      </div>
+      <div class="metric-chart">
+        <p-chart type="bar" [data]="['menuChartData']" [options]="miniChartOptions"></p-chart>
+      </div>
+      <div class="metric-period">(675.56 today)</div>
+    </div>
+
+    <!-- Total Orders -->
+    <div class="metric-card">
+      <div class="metric-header">
+        <div class="metric-title">
+          <span>Total Orders</span>
+          <i class="pi pi-shopping-cart"></i>
+        </div>
+        <div class="metric-value">786<span class="trend up">+15%</span></div>
+      </div>
+      <div class="metric-chart">
+        <p-chart type="bar" [data]="['orderChartData']" [options]="miniChartOptions"></p-chart>
+      </div>
+      <div class="metric-period">(675.56 today)</div>
+    </div>
+
+    <!-- Total Customers -->
+    <div class="metric-card">
+      <div class="metric-header">
+        <div class="metric-title">
+          <span>Total Customers</span>
+          <i class="pi pi-users"></i>
+        </div>
+        <div class="metric-value">255</div>
+      </div>
+      <div class="metric-chart">
+        <p-chart type="bar" [data]="['customerChartData']" [options]="miniChartOptions"></p-chart>
+      </div>
+      <div class="metric-period">(675.56 today)</div>
+    </div>
+
+    <!-- Total Income -->
+    <div class="metric-card">
+      <div class="metric-header">
+        <div class="metric-title">
+          <span>Total Income</span>
+          <i class="pi pi-dollar"></i>
+        </div>
+        <div class="metric-value">5341</div>
+      </div>
+      <div class="metric-chart">
+        <p-chart type="bar" [data]="['incomeChartData']" [options]="miniChartOptions"></p-chart>
+      </div>
+      <div class="metric-period">(675.56 today)</div>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="charts-grid">
+    <!-- Revenue Analytics -->
+    <div class="revenue-card">
+      <div class="card-header">
+        <h2>Revenue Analytics</h2>
+        <button class="period-badge">Monthly</button>
+      </div>
+      <div class="chart-container">
+        <p-chart type="bar" [data]="revenueData" [options]="revenueOptions"></p-chart>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="summary-card">
+      <div class="card-header">
+        <h2>Order Summary</h2>
+        <button class="period-badge">Weekly</button>
+      </div>
+      <div class="summary-content">
+        <!-- On Delivery -->
+        <div class="summary-item">
+          <div class="item-header">
+            <span>On Delivery</span>
+            <span class="amount">$3,750</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress" style="width: 85%; background-color: #20B2AA;"></div>
+          </div>
+          <div class="donut-chart">
+            <p-chart type="doughnut" [data]="getDonutData(85)" [options]="donutOptions"></p-chart>
+          </div>
+        </div>
+
+        <!-- Shipped -->
+        <div class="summary-item">
+          <div class="item-header">
+            <span>Shipped</span>
+            <span class="amount">$2,750</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress" style="width: 65%; background-color: #4169E1;"></div>
+          </div>
+          <div class="donut-chart">
+            <p-chart type="doughnut" [data]="getDonutData(65)" [options]="donutOptions"></p-chart>
+          </div>
+        </div>
+
+        <!-- Confirmed -->
+        <div class="summary-item">
+          <div class="item-header">
+            <span>Confirmed</span>
+            <span class="amount">$1,750</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress" style="width: 55%; background-color: #FF1493;"></div>
+          </div>
+          <div class="donut-chart">
+            <p-chart type="doughnut" [data]="getDonutData(55)" [options]="donutOptions"></p-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</div>

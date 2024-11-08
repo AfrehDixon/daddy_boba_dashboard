@@ -1,0 +1,23 @@
+ <div class="sidebar">
+      <!-- Logo -->
+      <div class="logo-container">
+        <h2 class="logo">DADDY BOBA</h2>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="nav-menu">
+        <a *ngFor="let item of menuItems"
+           [routerLink]="item.path"
+           routerLinkActive="active"
+           class="nav-item">
+          <i class="material-icons">{{item.icon}}</i>
+          <span>{{item.label}}</span>
+        </a>
+
+        <!-- Logout Button -->
+        <a class="nav-item logout" (click)="logout()">
+          <i class="material-icons">logout</i>
+          <span>Logout</span>
+        </a>
+      </nav>
+    </div>

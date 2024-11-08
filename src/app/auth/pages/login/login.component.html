@@ -1,0 +1,52 @@
+ <div class="login-container">
+      <div class="login-card">
+        <div class="content-wrapper">
+          <div class="image-section">
+            <img src="assets/ice-cream.jpg" alt="Pink ice cream with raspberries" />
+          </div>
+          
+          <div class="form-section">
+            <h1>Welcome Back!</h1>
+            <p class="subtitle">Please enter credentials to login</p>
+
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                <div class="input-wrapper">
+                  <i class="fas fa-user"></i>
+                  <input 
+                    type="text" 
+                    formControlName="username"
+                    placeholder="Email ID or Username"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-wrapper">
+                  <i class="fas fa-lock"></i>
+                  <input 
+                    [type]="showPassword ? 'text' : 'password'"
+                    formControlName="password"
+                    placeholder="Password"
+                  />
+                  <i 
+                    class="fas" 
+                    [class.fa-eye]="!showPassword"
+                    [class.fa-eye-slash]="showPassword"
+                    (click)="togglePasswordVisibility()"
+                  ></i>
+                </div>
+                <a href="#" class="forgot-password">Forgot Password?</a>
+              </div>
+
+              <button type="submit" class="login-button">Log In</button>
+
+              <p class="signup-text">
+                Don't have an account? 
+                <a href="#" class="signup-link">Sign up</a>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
