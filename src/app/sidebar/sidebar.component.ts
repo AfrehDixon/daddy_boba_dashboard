@@ -54,7 +54,7 @@ export class SidebarComponent {
     },
     {
       label: 'Transaction',
-      icon: 'store',
+      icon: 'monetization_on',
       path: '/transaction'
     },
     {

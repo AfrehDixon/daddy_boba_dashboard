@@ -226,6 +226,7 @@ venue: any;
     image: '/assets/images/chocolate-fudge.jpg',
     available: true,
     ingredients: ['Cream', 'Milk', 'Cocoa', 'Chocolate Chips', 'Fudge Sauce'],
+    // Toppings : ['Boba,Apple Poppins , Grape Poppins'],
     nutritionalInfo: {
       calories: 320,
       allergens: ['Milk', 'Soy']
