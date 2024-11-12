@@ -1,0 +1,53 @@
+ <div class="login-container">
+      <div class="login-card">
+        <div class="content-wrapper">
+          <div class="image-section">
+            <img src="https://pbs.twimg.com/media/F03EQC8WcAQpTuI.jpg" alt="Sample Image" width="100" />
+            <!-- <img src="https://www.google.com/imgres?q=daddy%20boba&imgurl=https%3A%2F%2Fpbs.twimg.com%2Fmedia%2FF03EQC8WcAQpTuI.jpg&imgrefurl=https%3A%2F%2Ftwitter.com%2Fcafewanderergh_%2Fstatus%2F1679214030727049242&docid=Hf9_n9gU_ipFXM&tbnid=3yigq7PGjpxD2M&vet=12ahUKEwiZpOyY19aJAxUjXUEAHVTmDYUQM3oECFwQAA..i&w=576&h=1024&hcb=2&ved=2ahUKEwiZpOyY19aJAxUjXUEAHVTmDYUQM3oECFwQAA" alt="Image"  width= 100/> -->
+          </div>
+          
+          <div class="form-section">
+            <h1>Welcome Back!</h1>
+            <p class="subtitle">Please enter credentials to login</p>
+
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                <div class="input-wrapper">
+                  <i class="fas fa-user"></i>
+                  <input 
+                    type="text" 
+                    formControlName="username"
+                    placeholder="Email ID or Username"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-wrapper">
+                  <i class="fas fa-lock"></i>
+                  <input 
+                    [type]="showPassword ? 'text' : 'password'"
+                    formControlName="password"
+                    placeholder="Password"
+                  />
+                  <i 
+                    class="fas" 
+                    [class.fa-eye]="!showPassword"
+                    [class.fa-eye-slash]="showPassword"
+                    (click)="togglePasswordVisibility()"
+                  ></i>
+                </div>
+                <a href="forgot-password" class="forgot-password" >Forgot Password?</a>
+              </div>
+
+              <button type="submit" class="login-button">Log In</button>
+
+              <p class="signup-text">
+                Don't have an account? 
+                <a href="#" class="signup-link">Sign up</a>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
