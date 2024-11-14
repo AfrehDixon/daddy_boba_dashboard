@@ -6,20 +6,27 @@ import { AuthGuard } from './guards/auth.guard';
 import { LoginComponent } from './auth/pages/login/login.component';
 
 export const routes: Routes = [
+  // Auth routes without MainLayout
   {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'auth/login'
+    path: 'auth',
+    children: [
+      {
+        path: 'login',
+        component: LoginComponent
+      }
+    ]
   },
-  {
-    path: 'auth/login',
-    component: LoginComponent
-  },
+  // Protected routes with MainLayout
   {
     path: '',
     component: MainLayoutComponent,
     // canActivate: [AuthGuard],
     children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'dashboard'
+      },
       {
         path: 'dashboard',
         loadComponent: () => import('./pages/dashboard/dashboard.component')
