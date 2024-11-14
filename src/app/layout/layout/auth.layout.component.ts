@@ -5,7 +5,11 @@ import { RouterModule } from '@angular/router';
   selector: 'app-layout',
   standalone: true,
   imports: [RouterModule],
-  templateUrl: './auth.layout.component.html',
+  template: `
+    <div class="auth-layout">
+      <router-outlet></router-outlet>
+    </div>
+  `,
   // styleUrl: './auth.layout.component.css'
 })
 export class LayoutComponent {
