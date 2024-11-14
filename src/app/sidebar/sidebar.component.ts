@@ -47,11 +47,11 @@ export class SidebarComponent {
     //   icon: 'message',
     //   path: '/message'
     // },
-    {
-      label: 'Venue Management',
-      icon: 'store',
-      path: '/venue-management'
-    },
+    // {
+    //   label: 'Venue Management',
+    //   icon: 'store',
+    //   path: '/venue-management'
+    // },
     {
       label: 'Transaction',
       icon: 'monetization_on',

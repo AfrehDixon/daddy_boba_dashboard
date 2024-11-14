@@ -11,7 +11,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     <div class="app-container">
       <app-sidebar />
       <main class="content">
-        <router-outlet />
+        <router-outlet></router-outlet>
       </main>
     </div>
   `,
