@@ -1,314 +1,250 @@
-<div class="filter-actions">
-  <div class="order-container">
-    <div class="header">
-      <h2>Order</h2>
-      <div class="header-right">
-        <div class="search-bar">
-          <input type="text" placeholder="Search here..." />
-          <i class="material-icons">search</i>
-        </div>
-        <div class="header-icons">
-          <i class="material-icons">notifications</i>
-          <i class="material-icons">chat</i>
-          <i class="material-icons">favorite_border</i>
-        </div>
-        <div class="profile">
-          <img src="assets/profile.jpg" alt="William" />
-          <!-- <span>William</span> -->
+<div class="order-container min-h-screen bg-gray-50 p-6">
+  <!-- Loading Overlay -->
+  <div *ngIf="loading" class="loading-overlay">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+    <div class="flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-gray-900">Orders</h1>
+      <div class="flex items-center space-x-4">
+        <div class="relative">
+          <input
+            type="text"
+            [(ngModel)]="filterControls.searchTerm"
+            placeholder="Search orders..."
+            class="pl-10 pr-4 py-2 border rounded-lg w-64 focus:ring-2 focus:ring-blue-500"
+          />
+          <span class="absolute left-3 top-2.5 text-gray-400">🔍</span>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="orders-section">
-      <div class="order-header">
-        <h3>Order Details</h3>
-        <div class="filter-controls">
-          <!-- Date Filter -->
-          <div class="date-filter">
-            <div class="date-input-group">
-              <label for="startDate">From</label>
-              <input type="date" id="startDate" />
-            </div>
-            <div class="date-input-group">
-              <label for="endDate">To</label>
-              <input type="date" id="endDate" />
-
-              <button
-                class="apply-date-filter bg-blue-400 p-2 font-semibold text-white"
-              >
-                Apply
-              </button>
-            </div>
-          </div>
-
-          <!-- Status Filter -->
-          <!-- <div class="filter-section"> -->
-          <label for="statusFilter">Status</label>
-          <select id="statusFilter">
-            <option value="">All</option>
-            <option value="PENDING">Pending</option>
-            <option value="DELIVERED">Delivered</option>
-            <option value="CANCELED">Canceled</option>
-            <option value="COMPLETED">Completed</option>
-            <option value="PROCESSING">Processing</option>
-          </select>
-          <!-- </div> -->
+  <!-- Filters -->
+  <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Date Range Filter -->
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-700">Date Range</label>
+        <div class="flex space-x-2">
+          <input
+            type="date"
+            [(ngModel)]="filterControls.dateRange.start"
+            class="form-input rounded-md border-gray-300 w-full"
+          />
+          <input
+            type="date"
+            [(ngModel)]="filterControls.dateRange.end"
+            class="form-input rounded-md border-gray-300 w-full"
+          />
         </div>
       </div>
 
-      <table class="orders-table">
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>Date</th>
-            <th>Customer Name</th>
-            <th>Location</th>
-            <th>Amount</th>
-            <th>Status Order</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let order of orders">
-            <td>{{ order.orderId }}</td>
-            <td>
-              {{ order.date }}<br />
-              <span class="time">{{ order.time }}</span>
-            </td>
-            <td>{{ order.customerName }}</td>
-            <td>{{ order.location }}</td>
-            <td>₵{{ order.amount }}</td>
-            <td>
-              <span class="status-badge" [class]="order.status.toLowerCase()">
-                {{ order.status }}
-              </span>
-            </td>
-            <div></div>
-
-            <div class="flex row-auto">
-              <td class="actions-cell">
-                <button
-                  (click)="showOrderDetails(order)"
-                  class="view-details-btn"
-                >
-                  View Details
-                </button>
-<td class="relative">
-
-
-                <button
-                  class="status-dropdown-trigger p-2 hover:bg-gray-100 rounded-full transition-colors"
-                  (click)="
-                    toggleStatusDropdown(order.orderId);
-                    $event.stopPropagation()
-                  "
-                >
-                  <i class="material-icons">more_horiz</i>
-                </button>
-
-                <div
-                  *ngIf="openStatusId === order.orderId"
-                  class="status-dropdown"
-                >
-                  <div class="py-1">
-                    <button
-                      (click)="updateOrderStatus(order.orderId, 'PENDING')"
-                      class="status-option"
-                    >
-                      <span class="status-dot pending"></span>
-                      Pending
-                    </button>
-                    <button
-                      (click)="updateOrderStatus(order.orderId, 'PROCESSING')"
-                      class="status-option"
-                    >
-                      <span class="status-dot processing"></span>
-                      Processing
-                    </button>
-                    <button
-                      (click)="updateOrderStatus(order.orderId, 'DELIVERED')"
-                      class="status-option"
-                    >
-                      <span class="status-dot delivered"></span>
-                      Delivered
-                    </button>
-                    <button
-                      (click)="updateOrderStatus(order.orderId, 'CANCELED')"
-                      class="status-option"
-                    >
-                      <span class="status-dot canceled"></span>
-                      Canceled
-                    </button>
-                  </div>
-                </div>
-              </td>
-
-                <!-- <nz-switch
-              [ngModel]="order.status === 'PENDING'"
-              (ngModelChange)="toggleOrderStatus(order, 'PENDING')"
-            >
-              PENDING
-            </nz-switch>
-            <nz-switch
-              [ngModel]="order.status === 'DELIVERED'"
-              (ngModelChange)="toggleOrderStatus(order, 'DELIVERED')"
-            >
-              DELIVERED
-            </nz-switch>
-            <nz-switch
-              [ngModel]="order.status === 'CANCELED'"
-              (ngModelChange)="toggleOrderStatus(order, 'CANCELED')"
-            >
-              CANCELED
-            </nz-switch>
-            <nz-switch
-              [ngModel]="order.status === 'Completed'"
-              (ngModelChange)="toggleOrderStatus(order, 'Completed')"
-            >
-              Completed
-            </nz-switch>
-            <nz-switch
-              [ngModel]="order.status === 'Processing'"
-              (ngModelChange)="toggleOrderStatus(order, 'Processing')"
-            >
-              Processing
-            </nz-switch>  -->
-
-                <!-- <nz-switch
-                [ngModel]="order.status === 'PENDING'"
-                (ngModelChange)="toggleOrderStatus(order)"
-              >
-                Toggle Status
-              </nz-switch>
-               <nz-switch
-                [ngModel]="order.status === 'DELIVERED'"
-                (ngModelChange)="toggleOrderStatus(order)"
-              >
-                Toggle Status
-              </nz-switch>
-               <nz-switch
-                [ngModel]="order.status === 'CANCELED'"
-                (ngModelChange)="toggleOrderStatus(order)"
-              >
-                Toggle Status
-              </nz-switch>
-               <nz-switch
-                [ngModel]="order.status === 'Completed'"
-                (ngModelChange)="toggleOrderStatus(order)"
-              >
-                Toggle Status
-              </nz-switch>
-               <nz-switch
-                [ngModel]="order.status === 'Processing'"
-                (ngModelChange)="toggleOrderStatus(order)"
-              >
-                Toggle Status
-              </nz-switch>
-
-              <!-- <button nz-button (click)="openStatusModal(order)">Change Status</button> -->
-              <!-- </td> -->
-            </div>
-          </tr>
-        </tbody>
-      </table>
+      <!-- Status Filter -->
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-700">Status</label>
+        <select
+          [(ngModel)]="filterControls.status"
+          class="form-select rounded-md border-gray-300 w-full"
+        >
+          <option value="">All Statuses</option>
+          <option *ngFor="let status of statuses" [value]="status">
+            {{ status }}
+          </option>
+        </select>
+      </div>
     </div>
+  </div>
 
-    <!-- Order Details Modal -->
-    <div *ngIf="selectedOrder" class="modal-overlay">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>Order Details</h2>
-          <button (click)="closeOrderDetails()" class="close-btn">
+  <!-- Orders Table -->
+  <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Order Number
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Date & Time
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Customer
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Amount
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Status
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <tr *ngFor="let order of filteredOrders" class="hover:bg-gray-50">
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="text-sm font-medium text-gray-900">{{ order.orderNumber }}</span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm text-gray-900">{{ formatDate(order.createdAt) }}</div>
+            <div class="text-sm text-gray-500">{{ formatTime(order.createdAt) }}</div>
+          </td>
+          <td class="px-6 py-4">
+            <div class="text-sm text-gray-900">{{ order.customer.name }}</div>
+            <div class="text-sm text-gray-500">{{ order.customer.phone }}</div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="text-sm font-medium text-gray-900">₵{{ order.totalAmount.toFixed(2) }}</span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span [class]="getStatusBadgeClass(order.status)">
+              {{ order.status }}
+            </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+            <button
+              (click)="showOrderDetails(order)"
+              class="text-blue-600 hover:text-blue-900 mr-3"
+            >
+              View Details
+            </button>
+            <button
+              (click)="toggleStatusDropdown(order._id)"
+              class="text-gray-600 hover:text-gray-900"
+            >
+              <i class="material-icons">more_vert</i>
+            </button>
+
+            <!-- Status Dropdown -->
+            <div
+              *ngIf="showStatusDropdown[order._id]"
+              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200"
+              (clickOutside)="closeAllStatusDropdowns()"
+            >
+              <div class="py-1">
+                <button
+                  *ngFor="let status of OrderStatus | keyvalue"
+                  (click)="updateOrderStatus(order._id, status.value)"
+                  class="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+                  [class.text-gray-900]="order.status !== status.value"
+                  [class.font-medium]="order.status === status.value"
+                >
+                  <span 
+                    class="w-2 h-2 rounded-full"
+                    [class]="getStatusDotClass(status.value)"
+                  ></span>
+                  <span>{{ status.value }}</span>
+                  <i
+                    *ngIf="order.status === status.value"
+                    class="material-icons text-sm text-green-500 ml-auto"
+                  >
+                    check
+                  </i>
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Order Details Modal -->
+  <div *ngIf="selectedOrder" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold text-gray-900">Order Details</h2>
+          <button (click)="closeOrderDetails()" class="text-gray-500 hover:text-gray-700">
             <i class="material-icons">close</i>
           </button>
         </div>
 
-        <div class="modal-body">
-          <!-- Order Summary -->
-          <div class="order-summary">
-            <div class="summary-header">
-              <h3>Order #{{ selectedOrder.orderId }}</h3>
-              <span
-                class="status-badge"
-                [class]="selectedOrder.status.toLowerCase()"
-              >
-                {{ selectedOrder.status }}
-              </span>
-            </div>
-
-            <div class="summary-details">
-              <div class="detail-item">
-                <span class="label">Date:</span>
-                <span>{{ selectedOrder.date }} {{ selectedOrder.time }}</span>
+        <!-- Order Summary -->
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Order Information</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm text-gray-500">Order Number</p>
+                <p class="text-sm font-medium text-gray-900">{{ selectedOrder.orderNumber }}</p>
               </div>
-              <div class="detail-item">
-                <span class="label">Payment Method:</span>
-                <span>{{ selectedOrder.paymentMethod || "N/A" }}</span>
+              <div>
+                <p class="text-sm text-gray-500">Status</p>
+                <span [class]="'status-badge ' + selectedOrder.status.toLowerCase()">
+                  {{ selectedOrder.status }}
+                </span>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Date</p>
+                <p class="text-sm font-medium text-gray-900">
+                  {{ formatDate(selectedOrder.createdAt) }} {{ formatTime(selectedOrder.createdAt) }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Total Amount</p>
+                <p class="text-sm font-medium text-gray-900">₵{{ selectedOrder.totalAmount.toFixed(2) }}</p>
               </div>
             </div>
           </div>
 
-          <!-- Customer Details -->
-          <div class="customer-details">
-            <h3>Customer Information</h3>
-            <div class="details-grid">
-              <div class="detail-item">
-                <span class="label">Name:</span>
-                <span>{{ selectedOrder.customerName }}</span>
+          <!-- Customer Information -->
+          <div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Customer Information</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm text-gray-500">Name</p>
+                <p class="text-sm font-medium text-gray-900">{{ selectedOrder.customer.name }}</p>
               </div>
-              <div class="detail-item">
-                <span class="label">Email:</span>
-                <span>{{ selectedOrder.customerDetails.email || "N/A" }}</span>
+              <div>
+                <p class="text-sm text-gray-500">Phone</p>
+                <p class="text-sm font-medium text-gray-900">{{ selectedOrder.customer.phone }}</p>
               </div>
-              <div class="detail-item">
-                <span class="label">Phone:</span>
-                <span>{{ selectedOrder.customerDetails.phone || "N/A" }}</span>
-              </div>
-              <div class="detail-item">
-                <span class="label">Delivery Address:</span>
-                <span>{{
-                  selectedOrder.customerDetails.address || "N/A"
-                }}</span>
+              <div>
+                <p class="text-sm text-gray-500">Email</p>
+                <p class="text-sm font-medium text-gray-900">{{ selectedOrder.customer.email }}</p>
               </div>
             </div>
           </div>
 
           <!-- Order Items -->
-          <div class="order-items">
-            <h3>Order Items</h3>
-            <table class="items-table">
+          <div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Order Items</h3>
+            <table class="min-w-full">
               <thead>
                 <tr>
-                  <th>Item</th>
-                  <th>Quantity</th>
-                  <th>Price</th>
-                  <th>Total</th>
+                  <th class="text-left text-sm font-medium text-gray-500">Item</th>
+                  <th class="text-right text-sm font-medium text-gray-500">Quantity</th>
+                  <th class="text-right text-sm font-medium text-gray-500">Price</th>
+                  <th class="text-right text-sm font-medium text-gray-500">Subtotal</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let item of selectedOrder.items">
-                  <td>{{ item.name }}</td>
-                  <td>{{ item.quantity }}</td>
-                  <td>₵{{ item.price }}</td>
-                  <td>₵{{ item.total }}</td>
+                  <td class="px-4 py-2 text-sm text-gray-900">
+                    <div class="flex flex-col">
+                      <span class="font-medium">{{ item.item.name }}</span>
+                      <span class="text-xs text-gray-500">{{ item.item.description }}</span>
+                    </div>
+                  </td>                  <td class="py-2 text-sm text-gray-900 text-right">{{ item.quantity }}</td>
+                  <td class="py-2 text-sm text-gray-900 text-right">₵{{ item.price.toFixed(2) }}</td>
+                  <td class="py-2 text-sm text-gray-900 text-right">₵{{ item.subtotal.toFixed(2) }}</td>
                 </tr>
-                <tr class="total-row">
-                  <td colspan="3">Total Amount</td>
-                  <td>₵{{ selectedOrder.amount }}</td>
+                <tr class="border-t">
+                  <td colspan="3" class="py-2 text-sm font-medium text-gray-900 text-right">Total</td>
+                  <td class="py-3 text-sm font-medium text-gray-900 text-right">
+                    ₵{{ selectedOrder.totalAmount.toFixed(2) }}
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
-
-          <!-- Delivery Notes -->
-        </div>
-
-        <div class="modal-footer">
-          <button (click)="closeOrderDetails()" class="close-modal-btn">
-            Close
-          </button>
         </div>
       </div>
     </div>
   </div>
 </div>
+<!-- </div> -->

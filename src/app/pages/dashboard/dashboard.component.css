@@ -60,6 +60,184 @@
   margin: 1rem 0;
 }
 
+.dashboard-stats {
+  padding: 1rem;
+  background-color: #fff;
+
+  .metrics-container {
+    padding: 0.5rem;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    .metric-card {
+      background: white;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      max-width: 280px; 
+
+      .metric-header {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0.75rem;
+
+        .metric-title {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          color: #6b7280;
+          font-size: 0.875rem;
+          margin-bottom: 0.25rem;
+
+          i {
+            color: #9ca3af;
+            font-size: 1rem;
+          }
+        }
+
+        .metric-value {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: #111827;
+        }
+      }
+
+      .metric-chart {
+        height: 40px;
+        margin: 0.5rem 0;
+      }
+
+      .metric-period {
+        color: #6b7280;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+      }
+    }
+  }
+
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    .revenue-card {
+      background: white;
+      border-radius: 0.5rem;
+      padding: 1.25rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        h2 {
+          font-size: 1rem;
+          font-weight: 500;
+          color: #111827;
+        }
+
+        .period-badge {
+          padding: 0.25rem 0.75rem;
+          border-radius: 9999px;
+          font-size: 0.75rem;
+          color: #6b7280;
+          background: #f3f4f6;
+          border: none;
+        }
+      }
+    }
+
+    .summary-card {
+      padding: 1.25rem;
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+
+        h2 {
+          font-size: 1rem;
+          font-weight: 500;
+        }
+      }
+
+      .summary-item {
+        margin-bottom: 1.5rem;
+
+        .item-header {
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.875rem;
+          color: #6b7280;
+          margin-bottom: 0.5rem;
+
+          .amount {
+            font-weight: 500;
+            color: #111827;
+          }
+        }
+
+        .progress-bar {
+          height: 6px;
+          background: #f3f4f6;
+          border-radius: 9999px;
+          margin-bottom: 0.75rem;
+
+          .progress {
+            height: 100%;
+            border-radius: 9999px;
+          }
+        }
+
+        .donut-chart {
+          height: 60px;
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep {
+  .p-chart {
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-stats {
+    .metrics-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .charts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-stats {
+    .metrics-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
 .metric-period {
   font-size: 0.75rem;
   color: #64748b;

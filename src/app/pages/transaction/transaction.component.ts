@@ -1,46 +1,28 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
+// transaction.component.ts
+import { Component, OnInit } from '@angular/core';
+import { AppService } from '../../../services/app.service';
+import { CommonModule, DecimalPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-
-interface Transaction {
-  id: string;
-  date: string;
-  time: string;
-  customerName: string;
-  type: 'credit' | 'debit' | 'transfer';
-  amount: number;
-  status: 'completed' | 'pending' | 'failed';
-  paymentMethod: string;
-  reference: string;
-}
-
-interface TransactionFilters {
-  dateRange: {
-    startDate: string;
-    endDate: string;
-  };
-  type: string;
-  status: string;
-  minAmount: number | null;
-  maxAmount: number | null;
-}
 
 @Component({
   selector: 'app-transaction',
-  standalone: true,
-  imports: [CommonModule,FormsModule],
   templateUrl: './transaction.component.html',
-  styleUrls: ['./transaction.component.css']
+  styleUrls: ['./transaction.component.css'],
+  standalone: true,
+  imports: [CommonModule, FormsModule, DecimalPipe, DatePipe],
+  providers: [DecimalPipe, DatePipe]
 })
-export class TransactionComponent {
-
-  transactions: Transaction[] = [];
-  filteredTransactions: Transaction[] = [];
-  searchQuery: string = '';
+export class TransactionComponent implements OnInit {
+  loading = false;
+  transactions: any[] = [];
+  filteredTransactions: any[] = [];
+  totalAmount = 0;
+  successfulTransactions = 0;
+  pendingTransactions = 0;
+  failedTransactions = 0;
   
-  filters: TransactionFilters = {
+  searchQuery = '';
+  filters = {
     dateRange: {
       startDate: '',
       endDate: ''
@@ -51,134 +33,73 @@ export class TransactionComponent {
     maxAmount: null
   };
 
-  transactionTypes = ['credit', 'debit', 'transfer'];
-  transactionStatuses = ['completed', 'pending', 'failed'];
+  transactionTypes = ['MOBILE_MONEY'];
+  transactionStatuses = ['PENDING', 'SUCCESS', 'FAILED'];
 
-  totalAmount: number = 0;
-  successfulTransactions: number = 0;
-  pendingTransactions: number = 0;
-  failedTransactions: number = 0;
-
-  constructor() {}
+  constructor(private appService: AppService) {}
 
   ngOnInit() {
-    // Load transactions (replace with actual API call)
     this.loadTransactions();
-    this.applyFilters();
   }
 
   loadTransactions() {
-    // Simulated data - replace with actual API call
-    this.transactions = [
-      {
-        id: 'TRX001',
-        date: '2024-03-07',
-        time: '14:30',
-        customerName: 'John Doe',
-        type: 'credit',
-        amount: 1500.00,
-        status: 'completed',
-        paymentMethod: 'Bank Transfer',
-        reference: 'REF001'
+    this.loading = true;
+    this.appService.getAllTransactions().subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.transactions = response.data;
+          this.filteredTransactions = [...this.transactions];
+          this.updateStatistics();
+        }
+        this.loading = false;
       },
-       {
-        id: 'TRX001',
-        date: '2024-03-07',
-        time: '14:30',
-        customerName: 'John Doe',
-        type: 'credit',
-        amount: 1500.00,
-        status: 'completed',
-        paymentMethod: 'Bank Transfer',
-        reference: 'REF001'
-      },
-        {
-        id: 'TRX001',
-        date: '2024-03-07',
-        time: '14:30',
-        customerName: 'John Doe',
-        type: 'credit',
-        amount: 1500.00,
-        status: 'completed',
-        paymentMethod: 'Bank Transfer',
-        reference: 'REF001'
-      },
-      // Add more sample transactions...
-    ];
+      error: (error) => {
+        console.error('Error loading transactions:', error);
+        this.loading = false;
+      }
+    });
+  }
+
+  updateStatistics() {
+    this.totalAmount = this.transactions.reduce((sum, tx) => sum + tx.amount, 0);
+    this.successfulTransactions = this.transactions.filter(tx => tx.status === 'SUCCESS').length;
+    this.pendingTransactions = this.transactions.filter(tx => tx.status === 'PENDING').length;
+    this.failedTransactions = this.transactions.filter(tx => tx.status === 'FAILED').length;
   }
 
   applyFilters() {
     let filtered = [...this.transactions];
 
-    // Apply date range filter
+    if (this.searchQuery) {
+      const query = this.searchQuery.toLowerCase();
+      filtered = filtered.filter(tx => 
+        tx.transactionReference.toLowerCase().includes(query) ||
+        tx.order?.customer?.name?.toLowerCase().includes(query)
+      );
+    }
+
     if (this.filters.dateRange.startDate && this.filters.dateRange.endDate) {
-      filtered = filtered.filter(transaction => {
-        const transactionDate = new Date(transaction.date);
-        const startDate = new Date(this.filters.dateRange.startDate);
-        const endDate = new Date(this.filters.dateRange.endDate);
-        return transactionDate >= startDate && transactionDate <= endDate;
+      const start = new Date(this.filters.dateRange.startDate);
+      const end = new Date(this.filters.dateRange.endDate);
+      filtered = filtered.filter(tx => {
+        const date = new Date(tx.createdAt);
+        return date >= start && date <= end;
       });
     }
 
-    // Apply type filter
     if (this.filters.type) {
-      filtered = filtered.filter(transaction => 
-        transaction.type === this.filters.type
-      );
+      filtered = filtered.filter(tx => tx.type === this.filters.type);
     }
 
-    // Apply status filter
     if (this.filters.status) {
-      filtered = filtered.filter(transaction => 
-        transaction.status === this.filters.status
-      );
-    }
-
-    // Apply amount range filter
-    if (this.filters.minAmount !== null) {
-      filtered = filtered.filter(transaction => 
-        transaction.amount >= this.filters.minAmount!
-      );
-    }
-    if (this.filters.maxAmount !== null) {
-      filtered = filtered.filter(transaction => 
-        transaction.amount <= this.filters.maxAmount!
-      );
-    }
-
-    // Apply search query
-    if (this.searchQuery) {
-      const query = this.searchQuery.toLowerCase();
-      filtered = filtered.filter(transaction =>
-        transaction.customerName.toLowerCase().includes(query) ||
-        transaction.reference.toLowerCase().includes(query) ||
-        transaction.id.toLowerCase().includes(query)
-      );
+      filtered = filtered.filter(tx => tx.status === this.filters.status);
     }
 
     this.filteredTransactions = filtered;
-    this.updateStatistics();
-  }
-
-  updateStatistics() {
-    this.totalAmount = this.filteredTransactions.reduce((sum, transaction) => 
-      sum + transaction.amount, 0
-    );
-    
-    this.successfulTransactions = this.filteredTransactions.filter(
-      t => t.status === 'completed'
-    ).length;
-    
-    this.pendingTransactions = this.filteredTransactions.filter(
-      t => t.status === 'pending'
-    ).length;
-    
-    this.failedTransactions = this.filteredTransactions.filter(
-      t => t.status === 'failed'
-    ).length;
   }
 
   clearFilters() {
+    this.searchQuery = '';
     this.filters = {
       dateRange: {
         startDate: '',
@@ -189,8 +110,16 @@ export class TransactionComponent {
       minAmount: null,
       maxAmount: null
     };
-    this.searchQuery = '';
-    this.applyFilters();
+    this.filteredTransactions = [...this.transactions];
   }
 
+  exportTransactions() {
+    // Implement export logic
+    console.log('Exporting transactions...');
+  }
+
+  viewDetails(id: string) {
+    // Implement view details logic
+    console.log('Viewing transaction details:', id);
+  }
 }
