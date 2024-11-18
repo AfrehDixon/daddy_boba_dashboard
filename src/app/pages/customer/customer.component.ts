@@ -1,149 +1,185 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Customer } from '../../../types';
-// import { Customer } from './customer.model'; // Adjust the path as necessary
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { finalize } from 'rxjs';
+import { AppService } from '../../../services/app.service';
 
+interface Customer {
+  _id: string;
+  name: string;
+  email: string;
+  phone: string;
+  gender: 'MALE' | 'FEMALE';
+  dob: Date;
+  createdAt: Date;
+  addresses: Array<{
+    streetAddress: string;
+    city: string;
+    landmark: string;
+    region: string;
+    label: string;
+    isDefault: boolean;
+  }>;
+}
 
-// interface Customer {
-//   id: string;
-//   name: string;
-//   email: string;
-//   phone: string;
-//   address: string;
-//   membershipLevel: 'Bronze' | 'Silver' | 'Gold' | 'Platinum';
-//   joinDate: Date;
-//   lastVisit: Date;
-//   totalOrders: number;
-//   totalSpent: number;
-// }
+interface CustomerAddress {
+  _id: string;
+  customer: {
+    _id: string;
+    name: string;
+    email: string;
+    phone: string;
+    gender: string;
+    dob: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  label: string;
+  streetAddress: string;
+  city: string;
+  region: string;
+  landmark?: string;  // Make landmark optional
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface RegisterCustomerDto {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  gender: 'MALE' | 'FEMALE';
+  dob: string;
+}
 
 @Component({
   selector: 'app-customer',
   standalone: true,
-  imports: [CommonModule , FormsModule],
+  imports: [CommonModule, FormsModule, MatSnackBarModule, ReactiveFormsModule],
   templateUrl: './customer.component.html',
-  styleUrl: './customer.component.css'
+  styleUrls: ['./customer.component.css']
 })
-export class CustomerComponent {
-   customers: Customer[] = [
-    {
-      id: '1',
-      name: 'John Doe',
-      email: 'john@example.com',
-      phone: '+233 20 123 4567',
-      address: '123 Main St, Accra',
-      membershipLevel: 'Gold',
-      joinDate: new Date('2023-01-15'),
-      lastVisit: new Date('2024-03-20'),
-      totalOrders: 25,
-      totalSpent: 1250.50
-    },
-    // Add more sample customers as needed
-  ];
-
-  // UI State
-  showingCustomerForm = false;
-  editingCustomer: Customer | null = null;
-  selectedCustomer: Customer | null = null;
+export class CustomerComponent implements OnInit {
+  customers: CustomerAddress[] = [];
+  loading = false;
   searchTerm = '';
-  membershipFilter = '';
+  selectedCustomer: CustomerAddress | null = null;
+  showAddModal = false;
 
-  // Form Model
-  customerForm = {
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    membershipLevel: 'Bronze' as const
-  };
-
-  ngOnInit() {
-    // Initialize component
-  }
-
-  get filteredCustomers() {
-    return this.customers.filter(customer => {
-      const matchesSearch = customer.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                          customer.email.toLowerCase().includes(this.searchTerm.toLowerCase());
-      const matchesMembership = !this.membershipFilter || customer.membershipLevel === this.membershipFilter;
-      return matchesSearch && matchesMembership;
+  constructor(
+    private customerService: AppService,
+    private snackBar: MatSnackBar,
+    private fb: FormBuilder
+  ) {
+    this.customerForm = this.fb.group({
+      name: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      gender: ['', [Validators.required]],
+      dob: ['', [Validators.required]]
     });
   }
 
-  // editCustomer(customer: Customer) {
-  //   this.showCustomerForm(customer);
-  // }
+  customerForm: any;
 
-  deleteCustomer(id: string) {
-    if (confirm('Are you sure you want to delete this customer? This action cannot be undone.')) {
-      this.customers = this.customers.filter(c => c.id !== id);
-    }
+  registerCustomer() {
+    if (this.customerForm.invalid) return;
+
+    this.loading = true;
+    this.customerService.registerCustomer(this.customerForm.value as RegisterCustomerDto)
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: () => {
+          this.showSnackBar('Customer registered successfully');
+          this.loadCustomers();
+          this.closeAddModal();
+        },
+        error: (error) => this.showSnackBar(error, true)
+      });
   }
 
-  showCustomerDetails(customer: Customer) {
+  closeAddModal() {
+    this.showAddModal = false;
+    this.customerForm.reset();
+  }
+  
+  // get filteredCustomers() {
+  //   return this.customers.filter(address => 
+  //     address.customer.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+  //     address.customer.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+  //     address.customer.phone.includes(this.searchTerm)
+  //   );
+  // }
+  
+  ngOnInit() {
+    this.loadCustomers();
+  }
+
+  loadCustomers() {
+    this.loading = true;
+    this.customerService.getCustomers()
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: (response) => {
+          this.customers = response.data;
+        },
+        error: (error) => {
+          this.showSnackBar(error, true);
+        }
+      });
+  }
+
+  showCustomerDetails(customer: CustomerAddress) {
     this.selectedCustomer = customer;
   }
-  getMembershipBadgeClass(level: string) {
-    const baseClasses = 'px-2 py-1 rounded-full text-xs font-semibold';
-    switch (level) {
-      case 'Bronze': return `${baseClasses} bg-yellow-100 text-yellow-800`;
-      case 'Silver': return `${baseClasses} bg-gray-100 text-gray-800`;
-      case 'Gold': return `${baseClasses} bg-yellow-100 text-yellow-800`;
-      case 'Platinum': return `${baseClasses} bg-purple-100 text-purple-800`;
-      default: return baseClasses;
+
+  deleteCustomer(id: string) {
+    if (confirm('Are you sure you want to delete this customer?')) {
+      this.loading = true;
+      this.customerService.deleteCustomer(id)
+        .pipe(finalize(() => this.loading = false))
+        .subscribe({
+          next: () => {
+            this.showSnackBar('Customer deleted successfully');
+            this.loadCustomers();
+          },
+          error: (error) => {
+            this.showSnackBar(error, true);
+          }
+        });
     }
   }
 
-  showCustomerForm(customer?: Customer) {
-    this.showingCustomerForm = true;
-    if (customer) {
-      this.editingCustomer = customer;
-      // this.customerForm = {
-      //   name: customer.name,
-      //   email: customer.email,
-      //   phone: customer.phone,
-      //   address: customer.address,
-      //   // membershipLevel: customer.membershipLevel
-      // };
-    }
+  showSnackBar(message: string, isError = false) {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      panelClass: isError ? ['error-snackbar'] : ['success-snackbar'],
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
+    });
   }
 
-  closeCustomerForm() {
-    this.showingCustomerForm = false;
-    this.editingCustomer = null;
-    this.customerForm = {
-      name: '',
-      email: '',
-      phone: '',
-      address: '',
-      membershipLevel: 'Bronze'
+  get filteredCustomers() {
+    return this.customers.filter(address => 
+      address.customer.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      address.customer.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      address.customer.phone.includes(this.searchTerm)
+    );
+  }
+
+  getDefaultAddress(customerAddress: CustomerAddress) {
+    return {
+      streetAddress: customerAddress.streetAddress,
+      city: customerAddress.city,
+      region: customerAddress.region,
+      label: customerAddress.label
     };
   }
 
-  saveCustomer() {
-    if (this.editingCustomer) {
-      // Update existing customer
-      const index = this.customers.findIndex(c => c.id === this.editingCustomer!.id);
-      this.customers[index] = {
-        ...this.customers[index],
-        ...this.customerForm
-      };
-    } else {
-      // Add new customer
-      const newCustomer: Customer = {
-        id: Date.now().toString(),
-        ...this.customerForm,
-        joinDate: new Date(),
-        lastVisit: new Date(),
-        totalOrders: 0,
-        totalSpent: 0
-      };
-      this.customers.push(newCustomer);
-    }
-    this.closeCustomerForm();
+  formatDate(date: Date | string) {
+    return new Date(date).toLocaleDateString();
   }
-
-  // editCustomer(customer:
-
 }

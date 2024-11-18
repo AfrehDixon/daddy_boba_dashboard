@@ -2,11 +2,14 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { authService } from '../../services/auth.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, HttpClientModule],
+  providers: [HttpClient,authService],
   styleUrls: ['./sidebar.component.css'],
   templateUrl: './sidebar.component.html',
 })
@@ -64,7 +67,9 @@ export class SidebarComponent {
     }
   ];
 
-  logout() {
-    console.log('Logging out...');
+  constructor(private authService: authService) { }
+
+  logout(): void {
+    this.authService.logout();
   }
 }

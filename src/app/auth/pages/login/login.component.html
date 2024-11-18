@@ -15,8 +15,8 @@
                   <i class="fas fa-user"></i>
                   <input 
                     type="text" 
-                    formControlName="username"
-                    placeholder="Email ID or Username"
+                    formControlName="email"
+                    placeholder="Email email"
                   />
                 </div>
               </div>
@@ -36,7 +36,7 @@
                     (click)="togglePasswordVisibility()"
                   ></i>
                 </div>
-                <a href="forgot-password" class="forgot-password" >Forgot Password?</a>
+                <a href="" class="forgot-password" (click)="navigateToForgotPassword()">Forgot Password?</a>
               </div>
 
               <button type="submit" class="login-button">Log In</button>
