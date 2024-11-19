@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, catchError, map, of, take, tap, throwError
 import { baseUrl } from '../constants/baseurl.constant';
 import { Router } from '@angular/router';
 import { AppState } from '../app/state/app.state';
+import { DashboardMetrics } from '../app/pages/dashboard/Types/dashboard.types';
 
 export interface Metrics {
   totalMenus: number;
@@ -63,8 +64,22 @@ export class AppService {
     // transactions$ = this.transactionsSubject.asObservable(),
     ) {}
   
-    getDashboardData(): Observable<{ success: boolean; data: DashboardData }> {
-      return this.http.get<{ success: boolean; data: DashboardData }>(`${baseUrl}/dashboard`);
+    // getDashboardData(): Observable<{ success: boolean; data: DashboardData }> {
+    //   return this.http.get<{ success: boolean; data: DashboardData }>(`${baseUrl}/dashboard`);
+    // }
+
+    getDashboardData(): Observable<{
+      success: boolean;
+      data: {
+        metrics: DashboardMetrics;
+        orderSummary: OrderSummary;
+        revenueAnalytics: {
+          labels: string[];
+          data: number[];
+        };
+      };
+    }> {
+      return this.http.get<any>(`${baseUrl}/dashboard`);
     }
 
   deleteUser(id: string): Observable<any> {
